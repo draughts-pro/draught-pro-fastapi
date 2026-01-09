@@ -13,21 +13,17 @@ from app.models.game import (
 )
 
 
-# Configure Redis manager for production scaling (if REDIS_URL is set and reachable)
 client_manager = None
 if settings.REDIS_URL:
     try:
-        # Avoid blocking startup too long, check if redis is actually reachable
         import redis
         r = redis.from_url(settings.REDIS_URL, socket_connect_timeout=1)
         r.ping()
         client_manager = socketio.AsyncRedisManager(settings.REDIS_URL)
-        print(f"INFO: Successfully connected to Redis at {settings.REDIS_URL}")
-    except Exception as e:
-        print(f"WARNING: Redis configured but not reachable at {settings.REDIS_URL}. Falling back to default manager.")
-        print(f"ERROR: {e}")
+    except Exception:
+        # Fallback to default manager if Redis is not reachable
+        pass
 
-# Create Socket.IO server with proper CORS and optional Redis
 sio = socketio.AsyncServer(
     async_mode="asgi",
     cors_allowed_origins=settings.CORS_ORIGINS,

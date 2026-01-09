@@ -12,22 +12,15 @@ async def cleanup_task():
     """Periodically clean up inactive rooms"""
     while True:
         await asyncio.sleep(settings.ROOM_CLEANUP_INTERVAL_SECONDS)
-        deleted = room_manager.cleanup_inactive_rooms()
-        if deleted > 0:
-            print(f"Cleaned up {deleted} inactive rooms")
+        room_manager.cleanup_inactive_rooms()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage application lifespan"""
     cleanup_task_handle = asyncio.create_task(cleanup_task())
-    print(f"Checkers multiplayer server starting on {settings.HOST}:{settings.PORT}")
-    print(f"Environment: {settings.ENV}")
-
     yield
-
     cleanup_task_handle.cancel()
-    print("Server shutting down")
 
 
 app = FastAPI(

@@ -22,7 +22,18 @@ class Settings(BaseSettings):
                     return json.loads(v)
                 except Exception:
                     pass
-            return [i.strip() for i in v.split(",")]
+            origins = [i.strip() for i in v.split(",")]
+            cleaned_origins = []
+            for o in origins:
+                o = o.rstrip("/")
+                if not o.startswith("http"):
+                    if "localhost" in o or "127.0.0.1" in o:
+                        cleaned_origins.append(f"http://{o}")
+                    else:
+                        cleaned_origins.append(f"https://{o}")
+                else:
+                    cleaned_origins.append(o)
+            return cleaned_origins
         return v
 
     REDIS_URL: str | None = None
