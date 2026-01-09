@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Checkers Multiplayer API",
+    title="Draughts Pro API",
     description="Real-time multiplayer checkers game backend",
     version="1.0.0",
     lifespan=lifespan,
@@ -53,7 +53,7 @@ async def health_check():
 async def root():
     """Root endpoint"""
     return {
-        "message": "Checkers Multiplayer API",
+        "message": "Draughts Pro API",
         "version": "1.0.0",
         "websocket_path": "/socket.io/",
     }
