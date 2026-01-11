@@ -41,7 +41,7 @@ async def connect(sid, environ):
 sid_map = {}
 
 @sio.event
-async def disconnect(sid):
+async def disconnect(sid, reason=None):
     if sid not in sid_map:
         return
 
@@ -59,7 +59,7 @@ async def disconnect(sid):
                 room=room_id
             )
 
-    room_manager.handle_disconnect(room_id, player_id)
+    room_manager.handle_disconnect(player_id)
     del sid_map[sid]
 
 

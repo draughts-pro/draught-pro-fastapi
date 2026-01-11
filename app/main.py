@@ -3,10 +3,20 @@ from fastapi.middleware.cors import CORSMiddleware
 import socketio
 from contextlib import asynccontextmanager
 import asyncio
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
 
 from app.core.config import settings
 from app.websockets.game_handler import sio
 from app.services.room_manager import room_manager
+
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        integrations=[FastApiIntegration()],
+        traces_sample_rate=settings.SENTRY_TRACES_SAMPLE_RATE,
+        send_default_pii=True,
+    )
 
 async def cleanup_task():
     """Periodically clean up inactive rooms"""

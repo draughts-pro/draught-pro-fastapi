@@ -44,6 +44,9 @@ class Settings(BaseSettings):
     ROOM_CLEANUP_INTERVAL_SECONDS: int = 3600
     INACTIVE_ROOM_TIMEOUT_SECONDS: int = 7200
 
+    SENTRY_DSN: str | None = "https://3de78001d6efde50d11fa59d32009fe4@o4508014103232512.ingest.de.sentry.io/4510693152522320"
+    SENTRY_TRACES_SAMPLE_RATE: float = 1.0
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,
